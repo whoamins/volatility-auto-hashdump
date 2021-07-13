@@ -6,6 +6,8 @@ os.system("mkdir output_volatility")
 os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} imageinfo > output_volatility/infovol.txt")
 
 with open("output_volatility/infovol.txt", "r") as file:
+	profiles_list = []
+
 	for line in file:
 		profiles = line
 		profiles_list = re.findall('[W]\w+', profiles)
@@ -29,3 +31,5 @@ with open("output_volatility/hivevol.txt", "r") as file:
 os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} --profile={profiles_list[0]} hashdump -y {' '.join(addresses_list[0])} -s {' '.join(addresses_list[1])} > output_volatility/hashes.txt")
 
 os.system(f"john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt output_volatility/hashes.txt")
+
+os.system(f"rm output_volatility/hivevol.txt && rm output_volatility/infovol.txt")
