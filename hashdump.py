@@ -3,11 +3,14 @@ import sys
 import re
 
 
-os.system("touch infovol.txt && touch hivevol.txt")
-os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} imageinfo > infovol.txt")
-
-with open("infovol.txt", "r") as file:
+with open("infovol.txt", "w+") as file:
 	profiles_list = []
+
+	try:
+		os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} imageinfo > infovol.txt")
+	except:
+		print("Maybe you forgot to export PATH to your Volatility")
+		sys.exit()
 
 	for line in file:
 		profiles = line
@@ -15,14 +18,14 @@ with open("infovol.txt", "r") as file:
 		break
 
 
-try:
-	os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} hivelist --profile={profiles_list[0]} > hivevol.txt")
-except:
-	print("Try to export PATH to your Volatility")
-	sys.exit()
-
-with open("hivevol.txt", "r") as file:
+with open("hivevol.txt", "w+") as file:
 	addresses_list = []
+
+	try:
+		os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} hivelist --profile={profiles_list[0]} > hivevol.txt")
+	except:
+		print("Maybe you forgot to export PATH to your Volatility")
+		sys.exit()
 
 	for line in file:
 		if "\REGISTRY\MACHINE\SYSTEM" in line:
@@ -34,9 +37,8 @@ with open("hivevol.txt", "r") as file:
 try:
 	os.system(f"volatility_2.6_lin64_standalone -f {sys.argv[1]} --profile={profiles_list[0]} hashdump -y {' '.join(addresses_list[0])} -s {' '.join(addresses_list[1])} > hashes.txt")
 except:
-	print("Try to export PATH to your Volatility")
+	print("Maybe you forgot to export PATH to your Volatility")
 	sys.exit()
 
-os.system(f"john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt")
 
-os.system(f"rm hivevol.txt && rm infovol.txt")
+os.system(f"john --format=NT --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt")
