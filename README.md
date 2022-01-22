@@ -3,10 +3,12 @@ Script for automatic dump and brute-force passwords using Volatility Framework
 
 # Quick Start
 
-<code>
-  export PATH=$PATH:[Path to Volatility]
-  python3 hashdump.py [FILE]
-</code>
+**Install Volatility and Python**
+<code>./install_volatility.sh</code>
+
+**Run the script**
+<code>python3 hashdump.py image_path</code>
+
 
 # Example
 
