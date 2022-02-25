@@ -4,7 +4,7 @@ import volatility.utils as utils
 import volatility.plugins.common as common
 
 
-class TestPlugin(common.AbstractWindowsCommand):
+class AutoHashDump(common.AbstractWindowsCommand):
     def calculate(self):
         address_space = utils.load_as(self._config)
         
